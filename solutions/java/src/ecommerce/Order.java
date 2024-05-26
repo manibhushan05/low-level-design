@@ -32,4 +32,8 @@ public class Order {
     public User getUser(){
         return user;
     }
+
+    public String getId() {
+        return id;
+    }
 }

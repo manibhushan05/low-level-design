@@ -1,5 +1,7 @@
 package ecommerce;
 
+import java.util.UUID;
+
 public class Product {
     private String id;
 
@@ -7,10 +9,10 @@ public class Product {
 
     private double price;
 
-    private long quantity;
+    private int quantity;
 
-    public Product(String id, String name, double price, long quantity) {
-        this.id = id;
+    public Product(String name, double price, int quantity) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -22,5 +24,21 @@ public class Product {
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public synchronized boolean isAvailable(int quantity) {
+        return this.quantity >= quantity;
+    }
+
+    public synchronized void updateQuantity(int quantity) {
+        this.quantity += quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

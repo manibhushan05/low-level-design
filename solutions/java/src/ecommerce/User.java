@@ -1,5 +1,7 @@
 package ecommerce;
 
+import java.util.UUID;
+
 public class User {
     private String id;
 
@@ -7,13 +9,18 @@ public class User {
 
     private String phone;
 
-    public User(String id, String name, String phone) {
-        this.id = id;
+
+    public User(String name, String phone) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.phone = phone;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getId() {
+        return id;
     }
 }
