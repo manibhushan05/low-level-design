@@ -12,6 +12,6 @@ public class Dice {
     }
 
     public int rollDice() {
-        return (int) (Math.random() * (MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE);
+        return ThreadLocalRandom.current().nextInt(MIN_VALUE, MAX_VALUE + 1);
     }
 }

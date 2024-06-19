@@ -1,23 +1,31 @@
 package ratelimiter;
 
-public class RateLimiterService {
-    private RateLimiterFactory rateLimiterFactory;
+public class RateLimiterService extends RateLimiterSubject{
+    private static RateLimiterService instance;
+    private RateLimiterStrategy strategy;
 
-    public RateLimiterService(RateLimiterFactory rateLimiterFactory) {
-        this.rateLimiterFactory = rateLimiterFactory;
-    }
-    public boolean allowServiceRequest(String serviceName, RateLimit rateLimit) {
-        ServiceRateLimiter rateLimiter = rateLimiterFactory.getServiceRateLimiters(serviceName, rateLimit);
-        return rateLimiter.allowRequest();
+    private RateLimiterService() {}
+
+    public static RateLimiterService getInstance() {
+        if (instance == null) {
+            synchronized (RateLimiterService.class) {
+                if (instance == null) {
+                    instance = new RateLimiterService();
+                }
+            }
+        }
+        return instance;
     }
 
-    public boolean allowResourceRequest(String resourceName, RateLimit rateLimit) {
-        ResourceRateLimiter rateLimiter = rateLimiterFactory.getResourceRateLimiters(resourceName, rateLimit);
-        return rateLimiter.allowRequest();
+    public void setStrategy(RateLimiterStrategy strategy) {
+        this.strategy = strategy;
     }
 
-    public boolean allowUserRequest(String serviceName, String userId, RateLimit rateLimit) {
-        UserRateLimiter rateLimiter = rateLimiterFactory.getUserRateLimiter(serviceName, userId, rateLimit);
-        return rateLimiter.allowRequest();
+    public boolean allowRequest(String key) {
+        if (strategy == null) {
+            throw new IllegalStateException("RateLimiterStrategy not set");
+        }
+        return strategy.allowRequest(key);
     }
+
 }
